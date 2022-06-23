@@ -53,8 +53,8 @@ class StockPicking(models.Model):
         fp.write(binascii.a2b_base64(self.file))
         fp.seek(0)
         values = {}
-        #workbook = xlrd.open_workbook(fp.name)
-        workbook = xlrd.open_workbook('C://Users//cesar//Downloads//Ventas Artículos.xls')
+        workbook = xlrd.open_workbook(fp.name)
+        #workbook = xlrd.open_workbook('C://Users//cesar//Downloads//Ventas Artículos.xls')
         sheet = workbook.sheet_by_index(0)
         order_id=self.id
         contador = 0
