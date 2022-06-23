@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+
+   	 <record id="method_import_line_so.method_import_line_so_form" model="ir.ui.view">
+            <field name="name">method.import.line.so.method.import.line.so.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='order_line']" position="before">
+                  <field name="file" filename="name"/>
+                  <button name="import_file" string="Importar Líneas" type="object"/>
+              </xpath>  
+            </field>
+        </record>
+
+  </data>
+</odoo>
