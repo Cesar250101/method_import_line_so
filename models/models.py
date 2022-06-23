@@ -53,8 +53,8 @@ class StockPicking(models.Model):
         fp.write(binascii.a2b_base64(self.file))
         fp.seek(0)
         values = {}
-        workbook = xlrd.open_workbook(fp.name)
-        #workbook = xlrd.open_workbook('C://Users//cesar//Downloads//Ventas Artículos.xls')
+        #workbook = xlrd.open_workbook(fp.name)
+        workbook = xlrd.open_workbook('C://Users//cesar//Downloads//Ventas Artículos.xls')
         sheet = workbook.sheet_by_index(0)
         order_id=self.id
         contador = 0
@@ -63,6 +63,7 @@ class StockPicking(models.Model):
             if row_no>=22:
                 product=line[1].replace('.0','')
                 if product:
+                    precio_unitario=int(line[10].replace('.0',''))/int(line[9].replace('.0',''))                    
                     product_id=self.env['product.product'].search([('default_code','=',product)],limit=1)
                     if product_id:
                         val={
@@ -71,7 +72,7 @@ class StockPicking(models.Model):
                                 'product_id':product_id.id,
                                 'product_uom_qty':line[9],
                                 'product_uom':product_id.uom_id.id,
-                                'price_unit':line[10],
+                                'price_unit':precio_unitario,
                                 #'location_id':self.location_id.id
                             }   
                         stock_move_id=self.env['sale.order.line'].sudo().create(val)                
