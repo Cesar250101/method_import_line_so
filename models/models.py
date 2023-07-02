@@ -40,42 +40,41 @@ except ImportError:
 
 
 
-class StockPicking(models.Model):
-    _inherit = 'sale.order'
+class PurchaseOrder(models.Model):
+    _inherit = 'purchase.order'
     file = fields.Binary('File')
-
 
     @api.multi
     def import_file(self):
         #if not file:
         #    raise Warning('Please Select File')
-        fp = tempfile.NamedTemporaryFile(suffix=".xlsx")
+        fp = tempfile.NamedTemporaryFile(suffix=".xls")
         fp.write(binascii.a2b_base64(self.file))
         fp.seek(0)
         values = {}
-        workbook = xlrd.open_workbook(fp.name)
-        # workbook = xlrd.open_workbook('C://Users//cesar//Downloads//Ventas Artículos.xls')
+        #workbook = xlrd.open_workbook(fp.name)
+        workbook = xlrd.open_workbook('C://Users//cesar//Downloads//VentasArtículos.xls')
         sheet = workbook.sheet_by_index(0)
         order_id=self.id
         contador = 0
         for row_no in range(sheet.nrows):
             line = list(map(lambda row:isinstance(row.value, str) and row.value.encode('utf-8') or str(row.value), sheet.row(row_no)))
-            if row_no>=22:
-                product=line[1].replace('.0','')
+            if row_no>=1:            
+                product=line[0].decode("utf-8").replace('.0','')
                 if product:
-                    precio_unitario=int(line[10].replace('.0',''))/int(line[9].replace('.0',''))                    
+                    precio_unitario=int(line[2].replace('.0',''))                    
                     product_id=self.env['product.product'].search([('default_code','=',product)],limit=1)
                     if product_id:
                         val={
                                 'name':product_id.name,
                                 'order_id':order_id,
                                 'product_id':product_id.id,
-                                'product_uom_qty':line[9],
+                                'product_qty':line[1],
                                 'product_uom':product_id.uom_id.id,
                                 'price_unit':precio_unitario,
-                                #'location_id':self.location_id.id
+                                'date_planned':self.date_order
                             }   
-                        stock_move_id=self.env['sale.order.line'].sudo().create(val)                
+                        stock_move_id=self.env['purchase.order.line'].sudo().create(val)                
                     else:
                         raise Warning("El SKU "+product+" no existe, debe crear el producto primero")
 

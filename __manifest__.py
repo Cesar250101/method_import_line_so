@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "method_import_line_so",
+    'name': "method_import_line_po",
 
     'summary': """
-        Importa líneas de nota de venta desde un archivo Excel""",
+        Importa líneas de orden de compra desde un archivo Excel""",
 
     'description': """
         Long description of module's purpose
@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','sale'],
+    'depends': ['base','purchase'],
 
     # always loaded
     'data': [
